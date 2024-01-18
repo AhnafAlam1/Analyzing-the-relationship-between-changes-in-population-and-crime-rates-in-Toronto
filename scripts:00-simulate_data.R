@@ -1,7 +1,7 @@
 #### Preamble ####
 # Purpose: Simulating neighbourhood crime statistics for Toronto
 # Author: Ahnaf Alam
-# Date: Jan 15, 2024
+# Date: Jan 18, 2024
 # Contact: ahnaf.alam@mail.utoronto.ca
 # Pre-requisites: -
 
@@ -23,7 +23,10 @@ crime_rates_sim <-
   tibble(
     Neighbourhood = neighborhoods,
     Population = sample(1000:100000, total, replace = TRUE),
-    Crime = sample(1:1000, total, replace = TRUE)
+    Shooting = sample(1:1000, total, replace = TRUE),
+    Shooting_Rate = sample(0:100, total, replace = TRUE),
+    Assault = sample(1:1000, total, replace = TRUE),
+    Assault_Rate = sample(0:100, total, replace = TRUE)
   )
 
 print(crime_rates_sim)
@@ -44,6 +47,12 @@ crime_rates_sim$Population |>
 
 crime_rates_sim$Crime |>
   class() == "integer"
+
+#4: Checking to see if there are total unique neighbourhoods or not
+
+crime_rates_sim$Neighbourhood |>
+  unique() |>
+  length() == 5
 
 
 
