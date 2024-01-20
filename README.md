@@ -4,4 +4,7 @@ The paper analyzes the relationship between population density and crime rate in
 
 **Statement of LLM usage: The Introduction, and portion of Data, and Discussion and Limitation on "Analyzing the relationship between crime and population density for Toronto neighbourhoods.qmd" was edited with the help of ChatGPT. The entire chat history can be found at "llm_usage.txt" 
 
+`Simulation Sketch.pdf` is pdf file that guides how ideally the simulated data should look like and how the graph and table should look like in the final paper. 
+
+
 `scripts:00-simulate_data.R` simulates the data to produce idealized table for the paper and tests were run on simulated data to see check if the simulation code worked or not. 
