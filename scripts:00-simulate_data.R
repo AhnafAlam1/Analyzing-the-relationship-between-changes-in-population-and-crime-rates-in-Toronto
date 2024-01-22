@@ -1,9 +1,8 @@
 #### Preamble ####
 # Purpose: Simulating neighbourhood crime statistics for Toronto
 # Author: Ahnaf Alam
-# Date: Jan 18, 2024
+# Date: Jan 22, 2024
 # Contact: ahnaf.alam@mail.utoronto.ca
-# Pre-requisites: -
 
 
 
@@ -16,6 +15,9 @@ library(janitor)
 set.seed(888)
 
 total <- 5
+
+### Note: The simulation assumes there are only 5 neighbourhoods, however, in reality,
+#### there are over hundreds of distinct neighbourhoods in Toronto
 
 neighborhoods <- c("North Toronto", "Avondale", "Yonge-Doris", "Guildwood", "West Rouge")
 

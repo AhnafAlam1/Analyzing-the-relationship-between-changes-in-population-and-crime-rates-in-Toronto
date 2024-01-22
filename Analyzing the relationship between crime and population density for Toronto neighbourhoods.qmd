@@ -1,0 +1,243 @@
+---
+title: "Understanding the relationship between crime and population density in Toronto neighbourhoods"
+subtitle: "An investigation into how crime count obscures the true scope of criminal activities in communites"
+author: "Ahnaf Alam"
+format:
+  pdf:
+    toc: true
+    number-sections: true
+date: today
+date-format: long
+bibliography: bibliography1.bib
+classoption: abstract 
+abstract: |
+  Criminal activities have gone up noticeably in Toronto and there is a prevailing call on elected  officials to allocate additional police presence and budgetary resources to areas that have higher population density, as criminal activities tend to be higher in those areas. However, implementing such policies may lead to misallocation of resources. I analyze the relationship between crime rate and population differences across Toronto neighbourhoods and find that it is true that neighbourhoods with larger populations tend to have higher crime activity. However, the crime rate per 100,000 people is identical across Toronto neighbourhoods. This is a policy-relevant finding, as elected officials must take a more targeted approach to policing and not drastically alter the level of policing across neighbourhoods, as that may result in unforeseen repercussions.
+---
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+#### Preamble ####
+# Purpose: Writing a paper titled "Understanding the relationship between crime and population density in Toronto neighbourhoods"
+# Author: Ahnaf Alam
+# Date: Jan 22, 2024
+# Contact: ahnaf.alam@mail.utoronto.ca
+
+#### Workplace setup ####
+library(opendatatoronto)
+library(tidyverse)
+library(janitor)
+library(knitr)
+library(ggplot2)
+library(ggpubr)
+library(kableExtra)
+```
+# Introduction [^1]
+
+Law enforcement is a prominent and widely debated issue across urban centers in Canada, particularly given the recent surge in population attributed to immigration. Despite studies indicating that immigration tends to lower crime rates [@lee2009immigration], public perception often associates an uptick in criminal activities with the influx of newcomers. The escalation in immigration has led to heightened population density in various neighborhoods across Toronto, prompting calls for increased police presence in areas identified as having elevated criminal activity. Notwithstanding, prior research suggests that a more restrained approach to proactive policing can result in crime reduction [@sullivan2017evidence].
+
+Responding to the concerns voiced by Toronto residents, public officials approve an augmented policing budget for the upcoming fiscal year [@Lautenschlager_2023]. The effectiveness of this budgetary increase depends on the strategic allocation of the additional resources. Furthermore, there is a mounting demand for public officials to allocate policing resources in accordance with the population density, as crime tends to be more prevalent in densely populated areas. This study aims to scrutinize the validity of the claim that crime rates are inherently higher in regions with increased population density, exploring potential policy implications for policing decisions.
+
+Research indicates that criminal activities are often influenced by socio-economic disparities [@glaeser1999there]. However, the correlation between these criminal activities and the population density of neighborhoods remains less clear. This paper clarifies this relationship, revealing that while certain criminal activities such as shootings, assault, auto thefts, and robberies are more prevalent in areas with higher population density, the crime rate, measured as crimes committed per 100,000 people, remains consistent across Toronto neighborhoods, regardless of population density. This finding holds significant policy implications, as reallocating resources based solely on higher crime numbers may yield unfavorable community outcomes. An excessive police presence can foster tension and distrust within communities [@rouse1985relationship]. Additionally, a disproportionate increase in police deployment achieved by reallocating resources may inadvertently elevate crime rates in the areas that experience a reduction in policing resources.
+
+In the subsequent sections, this paper will elaborate on the dataset, providing rationale for the inclusion of specific variables in the Data section. The ensuing Discussion and Limitation section will feature graphical representations, along with analysis. Finally, the paper concludes by summarizing the findings and proposing potential modifications for subsequent iterations.
+```{r}
+#| warning: false
+#| message: false
+#| include: false
+
+#### Reading the data from Github. The data is saved as data_toronto.csv file ####
+
+data_toronto <- read_csv("crime_data.csv")
+```
+[^1]: For replicability and other purposes, please check https://github.com/AhnafAlam1/Analyzing-the-relationship-between-changes-in-population-and-crime-rates-in-Toronto
+```{r}
+#| warning: false
+#| message: false
+#| include: false
+
+#### Cleaning the data. The process involves using clean() function and renaming some of the variable for better readability ####
+
+data_toronto_clean <-
+  clean_names(data_toronto) |>
+  select(x_id, area_name, population_2023, assault_2023, assault_rate_2023, autotheft_2023, autotheft_rate_2023,shooting_2023, shooting_rate_2023, robbery_2023,robbery_rate_2023) |>
+  rename(Neighbourhood = area_name,
+         Pop2023 = population_2023,
+         Assault = assault_2023,
+         A_Rate = assault_rate_2023,
+         Autotheft = autotheft_2023,
+         AT_Rate = autotheft_rate_2023,
+         Shooting = shooting_2023,
+         S_Rate = shooting_rate_2023,
+         Robbery = robbery_2023,
+         R_Rate = robbery_rate_2023,
+         ID = x_id) 
+```
+# Data
+
+The data for this analysis is extracted from Open Data Toronto using the opendatatoronto library [@opendatatoronto]. The dataset, Neighbourhood Crime Rates [@NEIGHBOURHOOD_CRIME_RATES_2024], is utilized for this project. Furthermore, R [@R], a statistical programming language, is exclusively used in this paper. For the purposes of cleaning and preparing the data, the libraries tidyverse [@tidy], janitor [@janet], knitr [@knitr], and kableExtra [@kable] are used. For the graphs, ggplot2 [@ggplot] is used.
+
+Data used in this paper come from opendatatoronto; however, raw data is compiled by Toronto Police Services. The raw data consists of observations for 158 neighborhoods across Toronto. For each neighborhood, the dataset contains information on its population, geometry, count of assaults, robberies, shootings, auto thefts, breaking and entering, theft from motor vehicles, homicides, bike thefts, and thefts from 2014 to 2023, and the rate of all corresponding crimes. The crime rate is calculated by normalizing each crime committed per 100,000 people. Population numbers reflect only the permanent residents of an area and exclude temporary populations such as commuters, business people, and non-temporary students. Lastly, the variable geometry provides longitude and latitude coordinates for each neighborhood.
+
+A table of summary statistics is provided below (see @tbl-one). The raw data is cleaned using the clean() function, and only 11 columns are selected going forward using select(). For each of the 158 Toronto neighborhoods, the summary statistics table includes information on their corresponding ID, population in 2023, count of assaults, auto thefts, shootings, robberies, and their rates per 100,000 people. The decision to omit the rest of the crime-related variables was taken as these crimes are often defined to be petty crimes, and petty crimes like bike theft and general theft are severely under-reported [@tarling2010reporting]; as a result, the number provided to the police may not reflect the actual count. However, the criminal activities selected in summary statistics are defined as serious crimes by the Canadian justice system [@justice], and serious crimes are reported more accurately to the police.
+
+The variable "assault" is defined by Toronto Police Services as the act, attempt, or threat of applying force to another person [@TPS]. "Robbery" is defined to be the act of taking property from another person by force or intimidation. Similarly, "auto theft" is the process of taking possession of another person's vehicle. Lastly, "shooting" identifies incidents where an individual is shot or shot at.
+
+An alternative approach for this paper could have involved utilizing a comparable dataset, comprising neighborhoods with aggregate crime counts and crime rates, without the disaggregation of crime types. However, this methodology is not used due to its potential lack of fairness in reflecting the true extent of crime numbers and rates. As previously highlighted, certain crimes are prone to under-reporting, introducing a risk of the statistical values being underestimated compared to the actual occurrences.
+
+Additionally, the summary table intentionally excludes crime data from prior years due to the absence of corresponding population statistics for those years, rendering such data redundant for the purposes of our analysis. The data cleaning process is finalized through the renaming of variables to enhance readability. Following these adjustments, "Pop2023" denotes the population of each neighborhood in 2023, "Assault" signifies the count of assault crimes in the year 2023, and "A_Rate" represents the assault rate for the same year. This renaming convention extends to all other crime-related variables. It is important to note that @tbl-one comprises observations for only five randomly selected neighborhoods out of the total 158. This deliberate choice for @tbl-one is aimed at offering a snapshot of the data post-cleaning, with the inclusion of information on all 158 neighborhoods deemed unnecessary for the intended purpose.
+```{r}
+#| label: tbl-one
+#| tbl-cap: "Summary statistics table for count of crime and rates of crimes across select five Toronto neighbourhoods"
+#| warning: false
+#| message: false
+#| echo: false
+
+#### For readbility and aesthetics purposes, we sift the clean data through kable and use kable_style for better legibility ####
+
+kable(data_toronto_clean[3:7, ], digits = 1, booktabs = TRUE, format = "latex") |>
+  kable_styling(font_size = 25, position = "center", latex_options = "scale_down")
+
+# The code above is derived based on comments on StackOverflow:  #https://stackoverflow.com/questions/49044753/scale-kable-table-to-fit-page-width
+
+```
+
+# Discussion and Limitations
+
+Both @fig-uno and @fig-dos were created using the ggplot2 library and later enhanced using functions from the ggpubr [@gg2] library. Both figures consist of four grids, each representing a specific relationship between population and the variable of interest. The x-axis of all the graphs represents the population count of Toronto's neighborhoods. In @fig-uno, the y-axis represents the number of criminal activities: shooting, assault, auto theft, and robbery. In contrast, in @fig-dos, the y-axis represents crime rates.
+
+In @fig-uno, the least squares line has a positive slope, which applies to all four grids, suggesting that as the population increases on the x-axis, we see an increase in the count of crimes applicable to shooting, assault, robbery, and auto theft. This confirms the hypothesis that a neighborhood with a higher population tends to see more crime. However, if we analyze @fig-dos, crime rates are constant in all four grids. This proves that the count of criminal activity may be higher; however, the crime rate committed per 100,000 Toronto residents is comparatively similar, regardless of whether a neighborhood is large, like Junction-Wallace Emerson, or relatively small, like Dovercourt Village.
+
+This finding holds significant policy implications for the Toronto Police, as an ill-considered allocation of resources based solely on apparent crime counts may inadvertently erode community trust, contrary to the objectives of law enforcement [@rouse1985relationship]. If the police opt to redistribute resources from areas with lower reported crime to those with higher figures, the potential consequence may be an increase in criminal activity in less densely populated regions, stemming from a diminished law enforcement presence in those areas. Striking a balance between addressing areas with high crime counts and maintaining a consistent law enforcement presence in less-densely populated communities is essential for achieving effective and community-oriented policing.
+
+It is crucial to acknowledge a primary limitation in this discussion, stemming from the absence of policing information in the incorporated dataset. The paper assumes an equitable distribution of policing budget and resources across all neighborhoods due to the lack of specific policing data. In reality, variations may exist in the utilization of police resources in different neighborhoods. To enhance the robustness of future iterations, researchers should incorporate comprehensive policing data, allowing for the control of differences in policing measures across diverse neighborhoods. This will provide a more accurate understanding of resource allocation and help in formulating policy recommendations for law enforcement strategies.
+```{r}
+#| warning: false
+#| message: false
+#| echo: false
+#| label: fig-uno
+#| fig-cap: Graph displaying relationship between crime count and population
+
+#### Graphing crime count and population data and arranging them into one figure ####
+
+df <-
+data_toronto_clean |>
+  ggplot(aes(x = Pop2023, y = Assault)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() + 
+  labs(x = "Toronto area population in 2023", y = "Count of assault") +
+  theme(legend.position = "bottom", plot.title = element_text(size = 8), axis.title = element_text(size = 6)) +
+  ggtitle("Assault count and population")
+
+sf <-
+data_toronto_clean |>
+  ggplot(aes(x = Pop2023, y = Autotheft)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() + 
+  labs(x = "Toronto area population in 2023", y = "Count of autotheft") +
+  theme(legend.position = "bottom", plot.title = element_text(size = 8), axis.title = element_text(size = 6)) +
+  ggtitle("Autohefts count and population")
+
+kf <-
+data_toronto_clean |>
+  ggplot(aes(x = Pop2023, y = Shooting)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() + 
+  labs(x = "Toronto area population in 2023", y = "Count of shootings") +
+  theme(legend.position = "bottom", plot.title = element_text(size = 8),axis.title = element_text(size = 6)) +
+  ggtitle("Shootings count and population")
+
+qf <-
+data_toronto_clean |>
+  ggplot(aes(x = Pop2023, y = Robbery)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() + 
+  labs(x = "Toronto area population in 2023", y = "Count of robberies") +
+  theme(legend.position = "bottom", plot.title = element_text(size = 8), axis.title = element_text(size = 6)) +
+  ggtitle("Robbery count and population")
+
+figure1 <- ggarrange(df, sf, kf, qf)
+
+print(figure1)
+
+
+```
+
+
+
+```{r}
+#| warning: false
+#| message: false
+#| echo: false
+#| label: fig-dos
+#| fig-cap: Graph displaying relationship between crime rates and population
+
+#### Graphing crime rate and population data and arranging them into one figure ####
+
+df1 <-
+data_toronto_clean |>
+  ggplot(aes(x = Pop2023, y = A_Rate)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() + 
+  labs(x = "Toronto area population in 2023", y = "Rate of assault") +
+  theme(legend.position = "bottom", plot.title = element_text(size = 8), axis.title = element_text(size = 6)) +
+  ggtitle("Assault rate and population")
+
+sf1 <-
+data_toronto_clean |>
+  ggplot(aes(x = Pop2023, y = A_Rate)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() + 
+  labs(x = "Toronto area population in 2023", y = "Rate of autotheft") +
+  theme(legend.position = "bottom", plot.title = element_text(size = 8), axis.title = element_text(size = 6)) +
+  ggtitle("Autothefts rate and population")
+
+kf1 <-
+data_toronto_clean |>
+  ggplot(aes(x = Pop2023, y = S_Rate)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() + 
+  labs(x = "Toronto area population in 2023", y = "Rate of shootings") +
+  theme(legend.position = "bottom", plot.title = element_text(size = 8),axis.title = element_text(size = 6)) +
+  ggtitle("Shooting rate and population")
+
+qf1 <-
+data_toronto_clean |>
+  ggplot(aes(x = Pop2023, y = R_Rate)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() + 
+  labs(x = "Toronto area population in 2023", y = "Rate of robberies") +
+  theme(legend.position = "bottom", plot.title = element_text(size = 8), axis.title = element_text(size = 6)) +
+  ggtitle("Robbery rate and population")
+
+figure2 <- ggarrange(df1, sf1, kf1, qf1)
+
+print(figure2)
+
+```
+# Conclusion
+
+Crime has increased steadily in Toronto over the years, prompting people to ask whether the police should allocate additional resources to areas of higher population density, as they have experienced a surge in criminal activities. However, adding additional resources to a neighborhood that already experiences high crime numbers could have the opposite effect, as researchers have found that sometimes, over-policing can lead to distrust in the community between residents and authorities. Therefore, lawmakers must understand whether policing resources need reallocation before implementing a policy.
+
+In this paper, I examine whether the claim that areas with high population density see greater crime holds true. The paper asserts that while the accurate crime count tends to be higher in areas where the population tends to be larger, the crime rates, a variable normalized to crimes committed per 100,000, are constant across all neighborhoods for all types of serious crimes. This suggests that while the crime count may be high in some areas, adding additional police resources to those places may or may not be productive, as the crime rate is the same for almost all communities. More policing could lead to unintended consequences.
+
+The data, however, is limited in that it does not contain information regarding the level of policing, and that stops us from analyzing whether some communities already have a higher-than-expected number of police presence. The next iteration of research should look at the data available regarding policing numbers in the community and incorporate that with the existing data.
+
+
+\newpage
+# Bibliography
+
+
+
+
+
+

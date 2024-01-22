@@ -1,9 +1,8 @@
 #### Preamble ####
 # Purpose: Downloads and saves the data from Opendatatoronto
 # Author: Ahnaf Alam
-# Date: Jan 15, 2024
+# Date: Jan 22, 2024
 # Contact: ahnaf.alam@mail.utoronto.ca
-# Pre-requisites: -
 
 
 
