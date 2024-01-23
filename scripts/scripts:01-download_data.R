@@ -32,4 +32,4 @@ print(crime_data)
 
 write_csv(
   x = crime_data,
-  file = "crime_data.csv")
+  file = "inputs/data/crime_data.csv")
