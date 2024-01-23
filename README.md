@@ -10,7 +10,7 @@ The paper analyzes the relationship between population density and crime rate in
 
 - `scripts:00-simulate_data.R` simulates the data to produce idealized table for the paper and tests were run on simulated data to see check if the simulation code worked or not. This folder can be found under `scripts`. 
 
-`- bibliography1.bib` includes BibText citation for all the sources that are being used in this paper and it is included under "paper" in `outputs` folder. 
+- `bibliography1.bib` includes BibText citation for all the sources that are being used in this paper and it is included under "paper" in `outputs` folder. 
 
-- `Analyzing the relationship between crime and population density for Toronto neighbourhoods.qmd` file includes all the code and text for this paper and `Analyzing the relationship between crime and population density for Toronto neighbourhoods.pdf` file contains the pdf version of the complete paper. Both the files can be found under "paper" section, under `outputs` folder. 
+- `Analyzing the relationship between crime and population density for Toronto neighbourhoods.qmd` file includes all the code and text for this paper and `Analyzing the relationship between crime and population density for Toronto neighbourhoods.pdf` file contains the pdf version of the complete paper. Both the files can be found under "paper" section, under `outputs` folder 
 
