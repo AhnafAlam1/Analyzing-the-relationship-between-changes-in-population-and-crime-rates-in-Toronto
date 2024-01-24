@@ -49,7 +49,9 @@ In the subsequent sections, this paper will elaborate on the dataset, providing 
 
 #### Reading the data from Github. The data is saved as data_toronto.csv file ####
 
-data_toronto <- read_csv("crime_data.csv")
+urlfile = "https://raw.githubusercontent.com/AhnafAlam1/Analyzing-the-relationship-between-changes-in-population-and-crime-rates-in-Toronto/main/inputs/data/crime_data.csv"
+
+data_toronto <- read_csv(url(urlfile))
 ```
 [^1]: For replicability and other purposes, please check https://github.com/AhnafAlam1/Analyzing-the-relationship-between-changes-in-population-and-crime-rates-in-Toronto
 ```{r}
@@ -73,6 +75,8 @@ data_toronto_clean <-
          Robbery = robbery_2023,
          R_Rate = robbery_rate_2023,
          ID = x_id) 
+
+head(data_toronto_clean)
 ```
 # Data
 
@@ -80,7 +84,7 @@ The data for this analysis is extracted from Open Data Toronto using the opendat
 
 Data used in this paper come from opendatatoronto; however, raw data is compiled by Toronto Police Services. The raw data consists of observations for 158 neighborhoods across Toronto. For each neighborhood, the dataset contains information on its population, geometry, count of assaults, robberies, shootings, auto thefts, breaking and entering, theft from motor vehicles, homicides, bike thefts, and thefts from 2014 to 2023, and the rate of all corresponding crimes. The crime rate is calculated by normalizing each crime committed per 100,000 people. Population numbers reflect only the permanent residents of an area and exclude temporary populations such as commuters, business people, and non-temporary students. Lastly, the variable geometry provides longitude and latitude coordinates for each neighborhood.
 
-A table of summary statistics is provided below (see @tbl-one). The raw data is cleaned using the clean() function, and only 11 columns are selected going forward using select(). For each of the 158 Toronto neighborhoods, the summary statistics table includes information on their corresponding ID, population in 2023, count of assaults, auto thefts, shootings, robberies, and their rates per 100,000 people. The decision to omit the rest of the crime-related variables was taken as these crimes are often defined to be petty crimes, and petty crimes like bike theft and general theft are severely under-reported [@tarling2010reporting]; as a result, the number provided to the police may not reflect the actual count. However, the criminal activities selected in summary statistics are defined as serious crimes by the Canadian justice system [@justice], and serious crimes are reported more accurately to the police.
+A table of data is provided below (see @tbl-one). The raw data is cleaned using the clean() function, and only 11 columns are selected going forward using select(). For each of the 158 Toronto neighborhoods, the summary statistics table includes information on their corresponding ID, population in 2023, count of assaults, auto thefts, shootings, robberies, and their rates per 100,000 people. The decision to omit the rest of the crime-related variables was taken as these crimes are often defined to be petty crimes, and petty crimes like bike theft and general theft are severely under-reported [@tarling2010reporting]; as a result, the number provided to the police may not reflect the actual count. However, the criminal activities selected in summary statistics are defined as serious crimes by the Canadian justice system [@justice], and serious crimes are reported more accurately to the police.
 
 The variable "assault" is defined by Toronto Police Services as the act, attempt, or threat of applying force to another person [@TPS]. "Robbery" is defined to be the act of taking property from another person by force or intimidation. Similarly, "auto theft" is the process of taking possession of another person's vehicle. Lastly, "shooting" identifies incidents where an individual is shot or shot at.
 
@@ -89,7 +93,7 @@ An alternative approach for this paper could have involved utilizing a comparabl
 Additionally, the summary table intentionally excludes crime data from prior years due to the absence of corresponding population statistics for those years, rendering such data redundant for the purposes of our analysis. The data cleaning process is finalized through the renaming of variables to enhance readability. Following these adjustments, "Pop2023" denotes the population of each neighborhood in 2023, "Assault" signifies the count of assault crimes in the year 2023, and "A_Rate" represents the assault rate for the same year. This renaming convention extends to all other crime-related variables. It is important to note that @tbl-one comprises observations for only five randomly selected neighborhoods out of the total 158. This deliberate choice for @tbl-one is aimed at offering a snapshot of the data post-cleaning, with the inclusion of information on all 158 neighborhoods deemed unnecessary for the intended purpose.
 ```{r}
 #| label: tbl-one
-#| tbl-cap: "Summary statistics table for count of crime and rates of crimes across select five Toronto neighbourhoods"
+#| tbl-cap: "Table displaying count of crime and rates of crimes across select five Toronto neighbourhoods for 2023"
 #| warning: false
 #| message: false
 #| echo: false
@@ -107,7 +111,13 @@ kable(data_toronto_clean[3:7, ], digits = 1, booktabs = TRUE, format = "latex") 
 
 Both @fig-uno and @fig-dos were created using the ggplot2 library and later enhanced using functions from the ggpubr [@gg2] library. Both figures consist of four grids, each representing a specific relationship between population and the variable of interest. The x-axis of all the graphs represents the population count of Toronto's neighborhoods. In @fig-uno, the y-axis represents the number of criminal activities: shooting, assault, auto theft, and robbery. In contrast, in @fig-dos, the y-axis represents crime rates.
 
+Both graphs feature a least squares line, which serves as the optimal fit for a given set of dependent and independent values [@stat]. In the context of this paper, the independent variable is the 2023 population statistics, while the dependent variables differ across various crimes and their respective rates. The primary purpose of the line is to highlight potential trends within the data that might not be apparent.
+
 In @fig-uno, the least squares line has a positive slope, which applies to all four grids, suggesting that as the population increases on the x-axis, we see an increase in the count of crimes applicable to shooting, assault, robbery, and auto theft. This confirms the hypothesis that a neighborhood with a higher population tends to see more crime. However, if we analyze @fig-dos, crime rates are constant in all four grids. This proves that the count of criminal activity may be higher; however, the crime rate committed per 100,000 Toronto residents is comparatively similar, regardless of whether a neighborhood is large, like Junction-Wallace Emerson, or relatively small, like Dovercourt Village.
+
+Analyzing @fig-uno, we find a graph featuring a neighborhood outlier—a statistical observation significantly deviating from others [@outliers]. Specifically, the auto theft graph highlights a neighborhood with close to 40,000 people experiencing auto thefts surpassing 400, reaching nearly 800, while every other neighborhood had fewer than 300 car thefts in 2023. This outlier may indicate policing differences or neighborhood-specific issues facilitating car theft.
+
+Eliminating the outlier could enhance our understanding of typical car theft patterns in Toronto neighborhoods. However, lacking sufficient information, we refrain from dismissing it in this research. The next iteration will further investigate these obscure neighborhoods to understand why certain areas exhibit exceptionally high crime rates. Importantly, the current graphs don't reveal whether the auto theft outlier neighborhood is atypical for all other crimes or if there's an underlying factor making it prone to criminal activity- a consideration for future iterations.
 
 This finding holds significant policy implications for the Toronto Police, as an ill-considered allocation of resources based solely on apparent crime counts may inadvertently erode community trust, contrary to the objectives of law enforcement [@rouse1985relationship]. If the police opt to redistribute resources from areas with lower reported crime to those with higher figures, the potential consequence may be an increase in criminal activity in less densely populated regions, stemming from a diminished law enforcement presence in those areas. Striking a balance between addressing areas with high crime counts and maintaining a consistent law enforcement presence in less-densely populated communities is essential for achieving effective and community-oriented policing.
 
@@ -139,7 +149,7 @@ data_toronto_clean |>
   theme_minimal() + 
   labs(x = "Toronto area population in 2023", y = "Count of autotheft") +
   theme(legend.position = "bottom", plot.title = element_text(size = 8), axis.title = element_text(size = 6)) +
-  ggtitle("Autohefts count and population")
+  ggtitle("Autothefts count and population")
 
 kf <-
 data_toronto_clean |>

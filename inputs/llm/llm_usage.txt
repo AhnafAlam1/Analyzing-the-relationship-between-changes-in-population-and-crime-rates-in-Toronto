@@ -44,4 +44,24 @@ An alternative approach for this paper could have involved utilizing a comparabl
 
 Additionally, the summary table intentionally excludes crime data from prior years due to the absence of corresponding population statistics for those years, rendering such data redundant for the purposes of our analysis. The data cleaning process is finalized through the renaming of variables to enhance readability. Following these adjustments, "Pop2023" denotes the population of each neighborhood in 2023, "Assault" signifies the count of assault crimes in the year 2023, and "A_Rate" represents the assault rate for the same year. This renaming convention extends to all other crime-related variables. It is important to note that Table 1 comprises observations for only five randomly selected neighborhoods out of the total 158. This deliberate choice for @tbl-one is aimed at offering a snapshot of the data post-cleaning, with the inclusion of information on all 158 neighborhoods deemed unnecessary for the intended purpose.
 
+Me:
+rewrite this better: Both figures contain least squares line. It represents a line that is the best fit for a set of dependent and independent values [@stat]. For the purposes of this paper, the independent variable is always 2023 population statistics and independent variables varies between different crimes and their respective rates. The line is essentially there to highlight trends that might exist in data, that may not be easily noticeable
+
+ChatGPT:
+Both graphs feature a least squares line, which serves as the optimal fit for a given set of dependent and independent values [@stat]. In the context of this paper, the independent variable consistently pertains to 2023 population statistics, while the dependent variables differ across various crimes and their respective rates. The primary purpose of the line is to accentuate potential trends within the data that might not be readily apparent.
+
+Me: 
+rewrite this more concisely: Analyzing the data, we observe that @fig-uno contains graphs featuring a neighborhood with an outlier. In statistics, outliers are observations that deviate significantly from other values in the dataset [@outliers]. Focusing on the graph for auto theft, we clearly see a neighborhood with a population close to 40,000 people and auto thefts well exceeding 400 car thefts, reaching a figure closer to 800 thefts. This is noteworthy because every other neighborhood experienced fewer than 300 car thefts in 2023. Outliers typically highlight breaks in trends that may not be obvious at first glance.
+
+There may be systematic policing differences in the outlier neighborhood, or perhaps there are neighborhood-related issues that make it easier to steal cars. In the latter case, we could dismiss the outlier if there are no obvious differences in neighborhoods, and that particular area simply has a high auto theft rate. Eliminating that neighborhood could provide us with a clearer visual and understanding of how the majority of Toronto neighborhoods look in terms of car thefts. However, we lack sufficient information to dismiss the outlier neighborhood from our research.
+
+The next iteration of this paper will delve deeper into these obscure neighborhoods to gain an understanding of why some crimes are exceptionally high in certain areas. Additionally, it is important to note that the graphs, in their current form, do not indicate whether the outlier neighborhood in the auto thefts graph is an outlier for all other remaining crimes, and whether there is an underlying feature about this neighborhood that makes it easier to commit crime. This is something the future iteration of the paper should examine.
+
+ChatGPT:
+
+Analyzing @fig-uno, we find a graph featuring a neighborhood outlier—a statistical observation significantly deviating from others [@outliers]. Specifically, the auto theft graph highlights a neighborhood with close to 40,000 people experiencing auto thefts surpassing 400, reaching nearly 800, while every other neighborhood had fewer than 300 car thefts in 2023. This outlier may indicate policing differences or neighborhood-specific issues facilitating car theft.
+
+Eliminating the outlier could enhance our understanding of typical car theft patterns in Toronto neighborhoods. However, lacking sufficient information, we refrain from dismissing it in this research. The next iteration will further investigate these obscure neighborhoods to understand why certain areas exhibit exceptionally high crime rates. Importantly, the current graphs don't reveal whether the auto theft outlier neighborhood is atypical for all other crimes or if there's an underlying factor making it prone to crime—a consideration for future iterations.
+
+
 
