@@ -80,7 +80,7 @@ head(data_toronto_clean)
 ```
 # Data
 
-The data for this analysis is extracted from Open Data Toronto using the opendatatoronto library [@opendatatoronto]. The dataset, Neighbourhood Crime Rates [@NEIGHBOURHOOD_CRIME_RATES_2024], is utilized for this project. Furthermore, R [@R], a statistical programming language, is exclusively used in this paper. For the purposes of cleaning and preparing the data, the libraries tidyverse [@tidy], janitor [@janet], knitr [@knitr], and kableExtra [@kable] are used. For the graphs, ggplot2 [@ggplot] is used.
+The data for this analysis is extracted from Open Data Toronto using the opendatatoronto library [@opendatatoronto]. The dataset, Neighbourhood Crime Rates [@NEIGHBOURHOOD_CRIME_RATES_2024], is utilized for this project. Furthermore, R [@R], a statistical programming language, is exclusively used in this paper. For the purposes of cleaning and preparing the data, the libraries tidyverse [@tidy], janitor [@janet], knitr [@knitr], and kableExtra [@kable] are used. For the graphs, ggplot2 [@ggplot] and ggpubr [@gg2] is used.
 
 Data used in this paper come from opendatatoronto; however, raw data is compiled by Toronto Police Services. The raw data consists of observations for 158 neighborhoods across Toronto. For each neighborhood, the dataset contains information on its population, geometry, count of assaults, robberies, shootings, auto thefts, breaking and entering, theft from motor vehicles, homicides, bike thefts, and thefts from 2014 to 2023, and the rate of all corresponding crimes. The crime rate is calculated by normalizing each crime committed per 100,000 people. Population numbers reflect only the permanent residents of an area and exclude temporary populations such as commuters, business people, and non-temporary students. Lastly, the variable geometry provides longitude and latitude coordinates for each neighborhood.
 
@@ -109,7 +109,7 @@ kable(data_toronto_clean[3:7, ], digits = 1, booktabs = TRUE, format = "latex") 
 
 # Discussion and Limitations
 
-Both @fig-uno and @fig-dos were created using the ggplot2 library and later enhanced using functions from the ggpubr [@gg2] library. Both figures consist of four grids, each representing a specific relationship between population and the variable of interest. The x-axis of all the graphs represents the population count of Toronto's neighborhoods. In @fig-uno, the y-axis represents the number of criminal activities: shooting, assault, auto theft, and robbery. In contrast, in @fig-dos, the y-axis represents crime rates.
+@fig-uno and @fig-dos consist of four grids, each representing a specific relationship between population and the variable of interest. The x-axis of all the graphs represents the population count of Toronto's neighborhoods. In @fig-uno, the y-axis represents the number of criminal activities: shooting, assault, auto theft, and robbery. In contrast, in @fig-dos, the y-axis represents crime rates.
 
 Both graphs feature a least squares line, which serves as the optimal fit for a given set of dependent and independent values [@stat]. In the context of this paper, the independent variable is the 2023 population statistics, while the dependent variables differ across various crimes and their respective rates. The primary purpose of the line is to highlight potential trends within the data that might not be apparent.
 
